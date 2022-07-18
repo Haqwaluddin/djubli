@@ -57,6 +57,7 @@ class _HomeState extends State<Home> {
         child: Center(
           child: Column(
             children: <Widget>[
+              Text("Echarts"),
               Container(
                 width: Get.width,
                 height: 250,
@@ -96,6 +97,11 @@ class _HomeState extends State<Home> {
                 ),
               ),
               SizedBox(height: 10),
+              Text("Syncfusion Chart"),
+              Text('Penjualan Innova 2.5 AT',
+              style: TextStyle(
+                fontWeight: FontWeight.bold
+              ),),
               Container(
                 height: 250,
                 width: Get.width,
