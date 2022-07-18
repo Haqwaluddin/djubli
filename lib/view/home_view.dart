@@ -4,7 +4,6 @@ import 'package:djubli/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:get/get.dart';
-import 'package:store_redirect/store_redirect.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Home extends StatefulWidget {
@@ -58,13 +57,14 @@ class _HomeState extends State<Home> {
           child: Column(
             children: <Widget>[
               Text("Echarts"),
-              Container(
-                width: Get.width,
-                height: 250,
-                color: Colors.red,
-                child: Echarts(
-                  option: '''
-                  {
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  width: 400,
+                  height: 250,
+                  child: Echarts(
+                    option: '''
+                    {
      title: {
     text: "Toyota Innova 2.5V AT",
     left: "center",
@@ -92,8 +92,9 @@ class _HomeState extends State<Home> {
       type: 'scatter'
     }
   ]
-                  }
-                ''',
+                    }
+                  ''',
+                  ),
                 ),
               ),
               SizedBox(height: 10),
@@ -102,49 +103,37 @@ class _HomeState extends State<Home> {
               style: TextStyle(
                 fontWeight: FontWeight.bold
               ),),
-              Container(
-                height: 250,
-                width: Get.width,
-                child: SfCartesianChart(
-                  primaryXAxis: CategoryAxis(),
-                  series: <ChartSeries>[
-                    ScatterSeries<SalesData, String>(
-                        dataSource: <SalesData>[
-                    SalesData('2015', 500000000),
-                    SalesData('2016', 400000000),
-                    SalesData('2017', 335000000),
-                    SalesData('2017', 300000000),
-                    SalesData('2018', 200000000)
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: 250,
+                  width: 400,
+                  child: SfCartesianChart(
+                    primaryXAxis: CategoryAxis(),
+                    series: <ChartSeries>[
+                      ScatterSeries<DataMobil, String>(
+                          dataSource: <DataMobil>[
+                            DataMobil('2015', 500000000),
+                            DataMobil('2016', 400000000),
+                            DataMobil('2017', 335000000),
+                            DataMobil('2017', 300000000),
+                            DataMobil('2018', 200000000)
+                      ],
+                        xValueMapper: (DataMobil sales, _) => sales.year,
+                        yValueMapper: (DataMobil sales, _) => sales.sales,
+                        xAxisName: "Tahun",
+                        yAxisName: "Harga"
+                      )
                     ],
-                      xValueMapper: (SalesData sales, _) => sales.year,
-                      yValueMapper: (SalesData sales, _) => sales.sales,
-                      xAxisName: "Tahun",
-                      yAxisName: "Harga"
-                    )
-                  ],
-                  tooltipBehavior: _tooltipBehavior,
-                    onTooltipRender: (TooltipArgs args) {
-                      // args.text = '1';
-                      print(args.pointIndex);
-                      changecarousel(int.parse("${args.pointIndex}"));
-                    }
+                    tooltipBehavior: _tooltipBehavior,
+                      onTooltipRender: (TooltipArgs args) {
+                        // args.text = '1';
+                        print(args.pointIndex);
+                        changecarousel(int.parse("${args.pointIndex}"));
+                      }
+                  ),
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(10),
-              //   child: TextField(
-              //     controller: id,
-              //   ),
-              // ),
-              // ElevatedButton(
-              //     onPressed: (){
-              //       setState(() {
-              //         activePage = int.parse(id.text);
-              //         _pageController.jumpToPage(int.parse(id.text));
-              //         print(activePage);
-              //       });
-              //     },
-              //     child: Text("Test")),
             Text("Toyota Innova 2.5V AT",
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -153,7 +142,6 @@ class _HomeState extends State<Home> {
             SizedBox(height: 10),
             Container(
               height: 250,
-              width: Get.width,
               child: PageView.builder(
                   itemCount: _getdata.datamobilinova.length,
                   pageSnapping: true,
@@ -207,12 +195,6 @@ class _HomeState extends State<Home> {
                     );
                   }),
             ),
-              // Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: indicators(_getdata.datamobilinova.length,activePage))
-
-
-
             ],
           ),
         ),
@@ -228,18 +210,10 @@ class _HomeState extends State<Home> {
     });
   }
 }
-class SalesData {
-  SalesData(this.year, this.sales);
+class DataMobil {
+  DataMobil(this.year, this.sales);
   final String year;
   final double sales;
 
 }
-class Customer {
-  String name;
-  int age;
-  Customer(this.name, this.age);
-  @override
-  String toString() {
-    return '{ ${this.name}, ${this.age} }';
-  }
-}
+
